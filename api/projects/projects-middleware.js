@@ -17,11 +17,17 @@ async function validateProjectId(req, res, next) {
     }
 }
 
-function validateProject(req, res, next) {
-    if (!req.body.name) {
-        next({ status: 400 })
-    } else {
-        next()
+async function validateProject(req, res, next) {
+    try {
+        if (req.body.name || req.body.description) {
+            next()
+        } else {
+            res.status(400).json({
+                message: 'Sorry, requirements are not met'
+            })
+        }
+    } catch (err) {
+        next(err);
     }
 }
 

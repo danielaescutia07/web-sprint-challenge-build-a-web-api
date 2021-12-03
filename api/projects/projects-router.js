@@ -41,9 +41,11 @@ router.put('/:id', validateProjectId, (req, res, next) => {
         .catch(next)
 })
 router.delete('/:id', validateProjectId, (req, res, next) => {
-    Project.remove()
-        .then()
-        .catch()
+    Project.remove(req.params.id)
+        .then(() => {
+            res.status(200).json(req.project)
+        })
+        .catch(next)
 })
 router.get('/:id/actions', validateProjectId, (req, res, next) => {
     Project.getProjectActions()
