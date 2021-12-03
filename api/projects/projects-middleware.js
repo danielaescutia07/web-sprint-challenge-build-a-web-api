@@ -17,22 +17,28 @@ async function validateProjectId(req, res, next) {
     }
 }
 
-async function validateProject(req, res, next) {
-    try {
-        if (req.body.name || req.body.description) {
-            next()
+function validateProject(req, res, next) {
+    if (!req.body.name || !req.body.description) {
+        next({ status: 400, message: 'Missing requirements'})
         } else {
-            res.status(400).json({
-                message: 'Sorry, requirements are not met'
-            })
-        }
-    } catch (err) {
-        next(err);
+            next()
     }
 }
 
-function validateActions(req, res, next) {
-
+async function validateActions(req, res, next) {
+    try {
+        const actions = await Project.getProjectActions(req.params.id)
+        if (actions) {
+            req.actions = actions
+            next()
+        } else {
+            res.status(404).json({
+                message: 'not found'
+            })
+        }
+    } catch (error) {
+        next(error)
+    }
 }
 
 function errorHandling(err, req, res, next) {
