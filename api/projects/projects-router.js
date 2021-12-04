@@ -4,7 +4,6 @@ const express = require('express');
 const {
     validateProjectId,
     validateProject,
-    validateActions,
     errorHandling
 } = require('./projects-middleware');
 
@@ -28,6 +27,7 @@ router.get('/:id', validateProjectId, (req, res) => {
     res.json(req.project)
 
 })
+
 router.post('/', validateProject, (req, res, next) => {
     Project.insert(req.body)
         .then(createdProject => {
@@ -35,6 +35,7 @@ router.post('/', validateProject, (req, res, next) => {
         })
         .catch(next)
 })
+
 router.put('/:id', validateProjectId, validateProject, (req, res, next) => {
     Project.update(req.params.id, req.body)
         .then(updatedProject => {
@@ -42,6 +43,7 @@ router.put('/:id', validateProjectId, validateProject, (req, res, next) => {
         })
         .catch(next)
 })
+
 router.delete('/:id', validateProjectId, (req, res, next) => {
     Project.remove(req.params.id)
         .then(() => {
@@ -49,6 +51,7 @@ router.delete('/:id', validateProjectId, (req, res, next) => {
         })
         .catch(next)
 })
+
 router.get('/:id/actions', validateProjectId, (req, res, next) => {
     Project.getProjectActions(req.params.id)
         .then(actions => {

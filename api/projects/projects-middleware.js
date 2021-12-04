@@ -1,5 +1,6 @@
 // add middlewares here related to projects
 const Project = require('./projects-model');
+const yup = require('yup');
 
 async function validateProjectId(req, res, next) {
     try{
@@ -25,22 +26,6 @@ function validateProject(req, res, next) {
     }
 }
 
-async function validateActions(req, res, next) {
-    try {
-        const actions = await Project.getProjectActions(req.params.id)
-        if (actions) {
-            req.actions = actions
-            next()
-        } else {
-            res.status(404).json({
-                message: 'not found'
-            })
-        }
-    } catch (error) {
-        next(error)
-    }
-}
-
 function errorHandling(err, req, res, next) {
     res.status(err.status || 500).json({
         message: `Project router: ${err.message}`,
@@ -51,6 +36,5 @@ function errorHandling(err, req, res, next) {
 module.exports = {
     validateProjectId,
     validateProject,
-    validateActions,
     errorHandling
 }
